@@ -33,10 +33,10 @@
 
 			<section id="content" class="container">
 				<h1 id="page-title">Bevía</h1>
-				<form id="contact-form" class="content-form" method="post" action="#">
+				<form id="contactform" class="content-form" method="post" action="#">
 	                <p>
-	                    <label for="name">Name:<span class="note">*</span></label>
-	                    <input id="name" type="text" name="name" class="required" required>
+	                    <label for="Fullname">Name:<span class="note">*</span></label>
+	                    <input id="Fullname" type="text" name="Fullname" class="required" required>
 	                </p>
 	                <p>
 	                    <label for="email">Email:<span class="note">*</span></label>
@@ -55,7 +55,7 @@
 	                    <textarea id="message" cols="68" rows="8" name="message" class="required" ></textarea>
 	                </p>
 	                <p>
-	                    <input id="submit" class="button" type="submit" name="submit" value="Send Message">
+	                    <input id="submit" class="button" type="submit" name="submit" value="Send Message" >
 	                </p>
 	            </form>
 			</section>
@@ -83,9 +83,13 @@
 		            <!-- end footer bottom -->
 		        </div>
 			</footer>
-
 		
-
-  	</div>
+		</div>
+		<!-- End Wrap-->
+		<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+		<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+		<script>
+			$("#contactform").validate();
+		</script>
 	</body>
 </html>
