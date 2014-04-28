@@ -1,4 +1,4 @@
-function valida_envia(){ 
+/*function valida_envia(){ 
    	//valido el nombre 
    	var _name = document.getElementById("Fullname").value;
    	if (_name.value.length==0){ 
@@ -11,4 +11,4 @@ function valida_envia(){
    	//el formulario se envia 
    	alert("Muchas gracias por enviar el formulario"); 
    	document.contactform.submit(); 
-}
+}*/
