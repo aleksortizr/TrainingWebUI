@@ -6,33 +6,28 @@ var App = {
     checkLocalStorage: function(){
         return !!localStorage.getItem;
     },
-    showAll: function () {
-        // 
-        var strHtml;
-        for (var i = 1, t = localStorage.length; i < t; i++) {
-            var user = JSON.parse(localStorage.getItem(i));
-            try {
-                strHtml += "<tr>" +
-                "<td>" + localStorage.key(i) + "</td>" +
-                "<td>" + user.nombre + "</td>" +
-                "<td>" + user.direccion + "</td>" +
-                "<td>" + user.cellphone + "</td>" +
-                "<td>" + user.email + "</td>" +
+    render: function() {
+        $.each(this.contacts, this.renderItem);
+    },
+    renderItem: function(index, item){
+        var strHtml = "<tr>" +
+                "<td>" + 1 + "</td>" +
+                "<td>" + item.nombre + "</td>" +
+                "<td>" + item.direccion + "</td>" +
+                "<td>" + item.cellphone + "</td>" +
+                "<td>" + item.email + "</td>" +
                 "<td><button class='btn btn-primary btn-xs' ><span class='glyphicon glyphicon-pencil'></span></button></td>" +
                 "<td><button class='btn btn-danger btn-xs' ><span class='glyphicon glyphicon-trash'></span></button></td>" +
                 "</tr>";
-            } catch (e) {
-                console.log("Data no correspondiente");
-            };
-        }
-
-        return strHtml;
+        $('#tblTablaContactos > tbody').append(strHtml);
+        //this.$table.append(this.templates.contact(item));
     },
     save: function (item) {
         //Agregamos el item nuevo al final del array            
         this.contacts.push(item);
         var contacts = JSON.stringify(this.contacts);
         this.storage.setItem('contacts', contacts);
+        //this.renderItem(item);
     },
     fetch: function(){
         //Obtenemos la key: contacts
@@ -42,19 +37,7 @@ var App = {
             this.contacts = [];
         }
     },
-    showItem: function (id) {
-    	/*var user = JSON.parse(localStorage.getItem(id));
-        return "<tr>" +
-                "<td>" + id + "</td>" +
-                "<td>" + user.nombre + "</td>" +
-                "<td>" + user.direccion + "</td>" +
-                "<td>" + user.cellphone + "</td>" +
-                "<td>" + user.email + "</td>" +
-                "<td><button id='edit-"+id+"' class='btn btn-primary btn-xs' ><span class='glyphicon glyphicon-pencil'></span></button></td>" +
-                "<td><button id='del-"+id+"' class='btn btn-danger btn-xs' ><span class='glyphicon glyphicon-trash'></span></button></td>" +
-                "</tr>"; */            
-            },
-            destroy: function (id) {
+    destroy: function (id) {
         //Eliminar el item con el id indicado
          localStorage.removeItem(id);
     },
@@ -71,23 +54,21 @@ var App = {
 
 $(function () {
 
+
         if(!App.checkLocalStorage()){
             alert('Tu navegador no soporta local storage');
             location.href  = 'http://firefox.com';
             return;
         }
 
-        App.init();
-        App.fetch();
-
-    // Id para el contacto agregado
-    var _id = 1;
-
+    App.init();
+    App.fetch();
+    App.render();
 
     //evento submit del formulario
     $('#frmAgregarContacto').on('submit', agregarContacto);
      // evento para eliminar todo el storage
-    $('#deleteStorage').on('submit', App.clear());
+    $('#deleteStorage').on('click', App.clear);
       
     function agregarContacto(eEvento) {        
         //evitamos que el form se envie (para que no recargue la pagina)
@@ -108,11 +89,8 @@ $(function () {
 
         // Guardamos el nuevo contacto
         App.save(newContact);
-        $('#tblTablaContactos > tbody:last').append(App.showItem(_id-1));
-
     };
     
-
 
 
 
