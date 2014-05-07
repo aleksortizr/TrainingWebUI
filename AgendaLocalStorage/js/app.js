@@ -1,33 +1,38 @@
 var App = {
-    init: function(){
+    init: function($table){
+        this.$table = $table;
+        //bind methods to object
+        this.bindAll();
         //cache localstorage
         this.storage = localStorage;
+        //render handlebars templates
+        this.compileTemplates();
+    },
+    bindAll: function(){
+        this.clear = this.clear.bind(this);
+        this.renderItem = this.renderItem.bind(this);
+        //this.editElement = this.editElement.bind(this);
     },
     checkLocalStorage: function(){
         return !!localStorage.getItem;
+    },
+    compileTemplates: function(){
+        this.templates = {
+            'contact': Handlebars.compile($('#items-template').html())
+        };
     },
     render: function() {
         $.each(this.contacts, this.renderItem);
     },
     renderItem: function(index, item){
-        var strHtml = "<tr>" +
-                "<td>" + 1 + "</td>" +
-                "<td>" + item.nombre + "</td>" +
-                "<td>" + item.direccion + "</td>" +
-                "<td>" + item.cellphone + "</td>" +
-                "<td>" + item.email + "</td>" +
-                "<td><button class='btn btn-primary btn-xs' ><span class='glyphicon glyphicon-pencil'></span></button></td>" +
-                "<td><button class='btn btn-danger btn-xs' ><span class='glyphicon glyphicon-trash'></span></button></td>" +
-                "</tr>";
-        $('#tblTablaContactos > tbody').append(strHtml);
-        //this.$table.append(this.templates.contact(item));
+        this.$table.append(this.templates.contact(item));
     },
     save: function (item) {
         //Agregamos el item nuevo al final del array            
         this.contacts.push(item);
         var contacts = JSON.stringify(this.contacts);
         this.storage.setItem('contacts', contacts);
-        //this.renderItem(item);
+        this.renderItem(null, item);
     },
     fetch: function(){
         //Obtenemos la key: contacts
@@ -61,16 +66,19 @@ $(function () {
             return;
         }
 
-    App.init();
+    var table = $('#tblTablaContactos > tbody');
+
+    App.init(table);
     App.fetch();
     App.render();
 
+
     //evento submit del formulario
     $('#frmAgregarContacto').on('submit', agregarContacto);
-     // evento para eliminar todo el storage
-    $('#deleteStorage').on('click', App.clear);
-      
-    function agregarContacto(eEvento) {        
+    $("#deleteStorage").on('click', App.clear);
+
+
+    function agregarContacto(eEvento) {        
         //evitamos que el form se envie (para que no recargue la pagina)
         eEvento.preventDefault();
 
@@ -80,16 +88,15 @@ $(function () {
         var strTel = $("#cellphone").val();
 
         //creando el objeto
-        var newContact = {
+        var _newContact = {
             nombre: strName,
             direccion: strDireccion,
             cellphone: strTel,
             email: strEmail
         };
-
         // Guardamos el nuevo contacto
-        App.save(newContact);
-    };
+        App.save(_newContact);
+    }
     
 
 
